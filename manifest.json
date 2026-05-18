@@ -1,0 +1,17 @@
+{
+  "name": "Study Planner",
+  "short_name": "StudyPlan",
+  "description": "Premium Study Planner with Gamification and Motivation",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#6366f1",
+  "background_color": "#f8fafc",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

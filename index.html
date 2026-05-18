@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <title>Modern Study Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-light" id="app-body">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                 <div class="logo">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <h2>Study<span>Planner</span></h2>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="nav-list">
+                    <li class="nav-item active" data-view="dashboard"><i class="fa-solid fa-house"></i><span>Dashboard</span></li>
+                    <li class="nav-item" data-view="tasks"><i class="fa-solid fa-list-check"></i><span>Tasks</span></li>
+                    <li class="nav-item" data-view="pomodoro"><i class="fa-solid fa-stopwatch"></i><span>Pomodoro</span></li>
+                    <li class="nav-item" data-view="calendar"><i class="fa-solid fa-calendar-days"></i><span>Calendar</span></li>
+                    <li class="nav-item" data-view="notes"><i class="fa-solid fa-note-sticky"></i><span>Notes</span></li>
+                    <li class="nav-item" data-view="fitness"><i class="fa-solid fa-heart-pulse"></i><span>Health & Fitness</span></li>
+                    <li class="nav-item" data-view="gamification"><i class="fa-solid fa-store"></i><span>Shop & Rewards</span></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0">
+                    <i class="fa-solid fa-moon"></i><span id="theme-text">Dark Mode</span>
+                </div>
+            </div>
+        </aside>
+        
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="mobile-logo" id="mobile-logo">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Study Planner</span>
+                    </div>
+                </div>
+                
+                <div class="streaks-container">
+                    <div class="gamification-header" style="display: flex; gap: 15px; align-items: center; margin-right: 15px;">
+                        <div class="level-badge" style="background: var(--primary-color); color: white; padding: 5px 10px; border-radius: 12px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 8px rgba(99,102,241,0.3);">
+                            <span id="header-level">Lvl 1</span>
+                        </div>
+                        <div class="xp-container" style="width: 120px; background: var(--bg-color-alt); border-radius: 10px; height: 16px; position: relative; overflow: hidden; border: 1px solid var(--border-color);">
+                            <div id="header-xp-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #8b5cf6); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+                            <span id="header-xp-text" style="position: absolute; top: 0; left: 0; width: 100%; text-align: center; font-size: 10px; line-height: 14px; font-weight: bold; color: var(--text-primary); text-shadow: 0px 0px 2px rgba(255,255,255,0.8);">0 / 100</span>
+                        </div>
+                        <div class="coin-badge" style="display: flex; align-items: center; gap: 5px; color: #f59e0b; font-weight: bold; font-size: 15px; background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 12px;">
+                            <i class="fa-solid fa-coins"></i> <span id="header-coins">0</span>
+                        </div>
+                    </div>
+                    <div class="streak-badge" title="App Usage Streak">
+                        <i class="fa-solid fa-bolt"></i> <span id="app-streak-count">App: 0</span> <small id="app-streak-best" style="font-size: 11px; margin-left: 4px; opacity: 0.8; font-weight: normal;">(Best: 0)</small>
+                    </div>
+                    <div class="streak-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success-color);" title="Study Streak">
+                        <i class="fa-solid fa-fire"></i> <span id="study-streak-count">Study: 0</span> <small id="study-streak-best" style="font-size: 11px; margin-left: 4px; opacity: 0.8; font-weight: normal;">(Best: 0)</small>
+                    </div>
+                </div>
+            </header>
+
+            <div class="views-container">
+                <!-- DASHBOARD VIEW -->
+                <section id="view-dashboard" class="view-section active">
+                    <div class="view-header">
+                        <h1 class="greeting" id="greeting-text">Good morning!</h1>
+                        <p class="date-time" id="current-date-time">Loading...</p>
+                    </div>
+                    <div class="motivational-quote" id="daily-quote">"Focus on the journey, not the destination."</div>
+                    <div class="dashboard-grid">
+                        <div class="summary-card glass-card">
+                            <div class="card-icon"><i class="fa-solid fa-check-double"></i></div>
+                            <div class="card-details"><h3 id="dash-completed-tasks">0</h3><p>Tasks Completed</p></div>
+                        </div>
+                        <div class="summary-card glass-card">
+                            <div class="card-icon warning"><i class="fa-solid fa-clock"></i></div>
+                            <div class="card-details"><h3 id="dash-pending-tasks">0</h3><p>Tasks Pending</p></div>
+                        </div>
+                        <div class="summary-card glass-card">
+                            <div class="card-icon success"><i class="fa-solid fa-stopwatch-20"></i></div>
+                            <div class="card-details"><h3 id="dash-study-hours">0h 0m</h3><p>Study Time</p></div>
+                        </div>
+                        <div class="summary-card glass-card">
+                            <div class="card-icon primary"><i class="fa-solid fa-star"></i></div>
+                            <div class="card-details"><h3 id="dash-productivity">0%</h3><p>Productivity</p></div>
+                        </div>
+                        <div class="analytics-card glass-card span-2">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <h2 id="chart-title">Weekly Progress</h2>
+                                <div class="chart-toggles" style="display: flex; gap: 8px;">
+                                    <button class="btn-secondary small chart-toggle active" data-period="weekly" style="padding: 6px 12px; font-size: 12px;">Weekly</button>
+                                    <button class="btn-secondary small chart-toggle" data-period="monthly" style="padding: 6px 12px; font-size: 12px;">Monthly</button>
+                                </div>
+                            </div>
+                            <div class="chart-container animated-chart" id="analytics-chart-container"></div>
+                        </div>
+                        <div class="upcoming-card glass-card span-2">
+                            <div class="card-header"><h2>Upcoming Tasks</h2></div>
+                            <div class="dashboard-task-list" id="dashboard-task-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TASKS VIEW -->
+                <section id="view-tasks" class="view-section">
+                    <div class="view-header">
+                        <h1>Task Management</h1>
+                        <button class="btn-primary" id="add-task-btn"><i class="fa-solid fa-plus"></i> New Task</button>
+                    </div>
+                    <div class="task-filters glass-panel">
+                        <div class="search-bar">
+                            <i class="fa-solid fa-search"></i>
+                            <input type="text" id="task-search" placeholder="Search tasks...">
+                        </div>
+                        <div class="filter-group">
+                            <select id="filter-priority" aria-label="Filter Priority">
+                                <option value="all">All Priorities</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                            <select id="filter-status" aria-label="Filter Status">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tasks-container">
+                        <div class="task-column">
+                            <h3 class="column-title">Tasks <span class="badge" id="task-view-count">0</span></h3>
+                            <div class="task-list" id="main-task-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- POMODORO VIEW -->
+                <section id="view-pomodoro" class="view-section">
+                    <div class="view-header"><h1>Focus Timer</h1></div>
+                    <div class="pomodoro-container glass-card">
+                        <div class="timer-tabs">
+                            <button class="timer-tab active" data-mode="pomodoro">Pomodoro (25m)</button>
+                            <button class="timer-tab" data-mode="shortBreak">Short Break (5m)</button>
+                            <button class="timer-tab" data-mode="longBreak">Long Break (15m)</button>
+                        </div>
+                        <div class="timer-display">
+                            <svg class="progress-ring" width="280" height="280">
+                                <circle class="progress-ring__circle-bg" stroke="var(--border-color)" stroke-width="12" fill="transparent" r="120" cx="140" cy="140"/>
+                                <circle class="progress-ring__circle" stroke="var(--primary-color)" stroke-width="12" fill="transparent" r="120" cx="140" cy="140"/>
+                            </svg>
+                            <div class="time-text" id="timer-time">25:00</div>
+                        </div>
+                        <div class="timer-controls">
+                            <button class="btn-icon large" id="timer-start" aria-label="Start Timer"><i class="fa-solid fa-play"></i></button>
+                            <button class="btn-icon large secondary" id="timer-pause" aria-label="Pause Timer" style="display:none;"><i class="fa-solid fa-pause"></i></button>
+                            <button class="btn-icon large warning" id="timer-reset" aria-label="Reset Timer"><i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CALENDAR VIEW -->
+                <section id="view-calendar" class="view-section">
+                    <div class="view-header"><h1>Calendar</h1></div>
+                    <div class="calendar-container glass-card">
+                        <div class="calendar-header">
+                            <button class="btn-icon" id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+                            <h2 id="calendar-month-year">...</h2>
+                            <button class="btn-icon" id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                        <div class="calendar-grid-header">
+                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        </div>
+                        <div class="calendar-grid" id="calendar-grid"></div>
+                    </div>
+                </section>
+
+                <!-- NOTES VIEW -->
+                <section id="view-notes" class="view-section">
+                    <div class="view-header">
+                        <h1>Quick Notes</h1>
+                        <span class="save-status" id="notes-save-status">Saved</span>
+                    </div>
+                    <div class="notes-container glass-card">
+                        <textarea id="quick-notes" placeholder="Type your notes here... They will be automatically saved."></textarea>
+                    </div>
+                </section>
+
+                <!-- HEALTH & FITNESS VIEW -->
+                <section id="view-fitness" class="view-section">
+                    <div class="view-header">
+                        <h1>Health & Fitness</h1>
+                        <button class="btn-primary btn-sm" id="reset-daily-health-btn"><i class="fa-solid fa-rotate-right"></i> Reset Today</button>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <div class="summary-card glass-card">
+                            <div class="card-icon success"><i class="fa-solid fa-bullseye"></i></div>
+                            <div class="card-details"><h3>2000</h3><p>Goal (kcal)</p></div>
+                        </div>
+                        <div class="summary-card glass-card">
+                            <div class="card-icon primary"><i class="fa-solid fa-utensils"></i></div>
+                            <div class="card-details"><h3 id="cal-intake">0</h3><p>Consumed (kcal)</p></div>
+                        </div>
+                        <div class="summary-card glass-card">
+                            <div class="card-icon warning"><i class="fa-solid fa-fire-burner"></i></div>
+                            <div class="card-details"><h3 id="cal-burned">0</h3><p>Burned (kcal)</p></div>
+                        </div>
+                        <div class="summary-card glass-card">
+                            <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                            <div class="card-details"><h3 id="cal-remaining">2000</h3><p>Remaining (kcal)</p></div>
+                        </div>
+                        
+                        <div class="health-card glass-card span-2">
+                            <div class="card-header"><h2>Log Food & Water</h2></div>
+                            <div class="form-row" style="margin-top: 15px;">
+                                <div class="form-group half" style="flex: auto;">
+                                    <input type="number" id="food-cal-input" placeholder="Calories consumed (e.g., 300)" min="1" max="5000">
+                                </div>
+                                <div class="form-group" style="justify-content: flex-end;">
+                                    <button class="btn-primary" id="add-food-btn"><i class="fa-solid fa-plus"></i> Add Food</button>
+                                </div>
+                            </div>
+                            <div style="margin-top: 30px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                    <h4 style="color: var(--text-secondary);">Water Intake (<span id="water-count">0</span>/8 glasses)</h4>
+                                </div>
+                                <div class="water-tracker" id="water-tracker">
+                                    <!-- 8 cups generated via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="health-card glass-card span-2">
+                            <div class="card-header"><h2>Workout Tracker</h2></div>
+                            <div class="form-row" style="margin-top: 15px;">
+                                <div class="form-group half">
+                                    <select id="workout-category">
+                                        <option value="cardio">Cardio (~10 kcal/min)</option>
+                                        <option value="yoga">Yoga (~4 kcal/min)</option>
+                                        <option value="running">Running (~12 kcal/min)</option>
+                                        <option value="strength">Strength Training (~8 kcal/min)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group half">
+                                    <input type="number" id="workout-duration" placeholder="Duration (mins)" min="1" max="300">
+                                </div>
+                                <div class="form-group" style="justify-content: flex-end;">
+                                    <button class="btn-primary" id="add-workout-btn"><i class="fa-solid fa-plus"></i> Add Workout</button>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 20px;">
+                                <h4 style="color: var(--text-secondary); margin-bottom: 10px;">Today's Workouts</h4>
+                                <div class="workout-list" id="workout-history-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GAMIFICATION / SHOP VIEW -->
+                <section id="view-gamification" class="view-section">
+                    <div class="view-header">
+                        <h1>Rewards & Achievements</h1>
+                        <div style="font-size: 18px; font-weight: bold; color: var(--warning-color); background: rgba(245, 158, 11, 0.1); padding: 8px 16px; border-radius: var(--border-radius-lg);">
+                            <i class="fa-solid fa-coins"></i> <span id="shop-coins-display">0</span> Coins
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <div class="challenges-card glass-card span-2">
+                            <div class="card-header">
+                                <h2>Daily Challenges</h2>
+                                <small style="color: var(--text-secondary);">Complete these today for bonus rewards!</small>
+                            </div>
+                            <div id="daily-challenges-container" style="margin-top: 15px; display: flex; flex-direction: column; gap: 12px;">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                        
+                        <div class="badges-card glass-card span-2">
+                            <div class="card-header"><h2>My Badges</h2></div>
+                            <div id="badges-container" style="margin-top: 15px; display: flex; gap: 15px; flex-wrap: wrap;">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                        
+                        <div class="shop-card glass-card span-4">
+                            <div class="card-header">
+                                <h2>Reward Shop</h2>
+                                <small style="color: var(--text-secondary);">Spend coins on perks and customizations</small>
+                            </div>
+                            <div id="shop-container" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="task-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Task</h2>
+                <button class="btn-icon close-modal" id="close-task-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="task-form" class="task-form">
+                <input type="hidden" id="task-id">
+                <div class="form-group">
+                    <label for="task-title">Title</label>
+                    <input type="text" id="task-title" required placeholder="e.g., Study Physics" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="task-subject">Subject</label>
+                    <input type="text" id="task-subject" placeholder="e.g., Science" maxlength="30">
+                </div>
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group half">
+                        <label for="task-deadline">Deadline</label>
+                        <input type="date" id="task-deadline">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-task-btn">Cancel</button>
+                    <button type="submit" class="btn-primary" id="save-task-btn">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="level-up-modal">
+        <div class="modal-content glass-card" style="text-align: center; max-width: 400px; padding: 40px 20px;">
+            <i class="fa-solid fa-angles-up" style="font-size: 60px; color: var(--primary-color); margin-bottom: 20px;"></i>
+            <h2 style="font-size: 32px; margin-bottom: 10px; font-family: 'Outfit';">Level Up!</h2>
+            <p style="font-size: 18px; color: var(--text-secondary); margin-bottom: 20px;">You are now level <span id="level-up-number" style="font-weight: bold; color: var(--primary-color); font-size: 24px;">2</span></p>
+            <button class="btn-primary" onclick="document.getElementById('level-up-modal').classList.remove('active')" style="width: 100%;">Awesome!</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="achievement-modal">
+        <div class="modal-content glass-card" style="text-align: center; max-width: 400px; padding: 40px 20px;">
+            <i id="achievement-icon" class="fa-solid fa-trophy" style="font-size: 60px; color: #f59e0b; margin-bottom: 20px;"></i>
+            <h2 style="font-size: 28px; margin-bottom: 10px; font-family: 'Outfit';">Achievement Unlocked!</h2>
+            <p id="achievement-title" style="font-size: 20px; font-weight: bold; color: var(--primary-color); margin-bottom: 24px;"></p>
+            <button class="btn-primary" onclick="document.getElementById('achievement-modal').classList.remove('active')" style="width: 100%;">Continue</button>
+        </div>
+    </div>
+
+    <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
+
+    <div id="toast-container" class="toast-container"></div>
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    console.log('ServiceWorker registered:', reg.scope);
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
