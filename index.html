@@ -15,7 +15,7 @@
 </head>
 <body class="theme-light" id="app-body">
     <div class="app-container">
-        <!--  Sidebar Navigation  -->
+        <!-- Sidebar Navigation -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                  <div class="logo">
@@ -37,6 +37,9 @@
             <div class="sidebar-footer">
                 <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0">
                     <i class="fa-solid fa-moon"></i><span id="theme-text">Dark Mode</span>
+                </div>
+                <div class="settings-toggle" id="reminder-settings-btn" role="button" tabindex="0" title="Reminders" style="margin-top:12px; display:flex; gap:10px; align-items:center; cursor:pointer;">
+                    <i class="fa-solid fa-bell"></i><span style="color:var(--text-secondary); font-weight:600;">Reminders</span>
                 </div>
             </div>
         </aside>
@@ -357,6 +360,34 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="reminder-settings-modal">
+        <div class="modal-content glass-card" style="max-width:420px;">
+            <div class="modal-header">
+                <h2 style="margin:0;">Reminder Settings</h2>
+                <button class="btn-icon close-modal" id="close-reminder-settings"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="reminder-settings-form" style="margin-top:12px;">
+                <div class="form-group">
+                    <label for="reminder-enabled">Enable Reminders</label>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="checkbox" id="reminder-enabled">
+                        <small style="color:var(--text-secondary);">Send hourly reminders when you have pending tasks</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reminder-interval">Reminder Interval (minutes)</label>
+                    <input type="number" id="reminder-interval" min="5" max="1440" step="1" placeholder="60">
+                    <small style="color:var(--text-secondary);">Minimum 5 minutes. Default: 60</small>
+                </div>
+                <div class="form-actions" style="margin-top:8px; display:flex; gap:8px; justify-content:flex-end;">
+                    <button type="button" class="btn-secondary" id="cancel-reminder-settings">Cancel</button>
+                    <button type="button" class="btn-secondary" id="reminder-test-btn">Send Test Notification</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="level-up-modal">
         <div class="modal-content glass-card" style="text-align: center; max-width: 400px; padding: 40px 20px;">
             <i class="fa-solid fa-angles-up" style="font-size: 60px; color: var(--primary-color); margin-bottom: 20px;"></i>
@@ -378,6 +409,24 @@
     <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
 
     <div id="toast-container" class="toast-container"></div>
+    <!-- In-app Reminder Widget -->
+    <div id="reminder-widget" class="reminder-widget" aria-hidden="false">
+        <button id="reminder-fab" class="reminder-fab" aria-label="Open Reminders">
+            <i class="fa-solid fa-bell"></i>
+            <span id="reminder-count" class="reminder-count">0</span>
+        </button>
+        <div id="reminder-panel" class="reminder-panel" aria-hidden="true">
+            <div class="reminder-header">
+                <h4>Pending Tasks</h4>
+                <button id="close-reminder-panel" class="btn-icon" aria-label="Close"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div id="reminder-task-list" class="reminder-task-list"></div>
+            <div class="reminder-actions">
+                <button id="reminder-check-now" class="btn-secondary">Check Now</button>
+                <button id="reminder-open-settings" class="btn-primary">Settings</button>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
